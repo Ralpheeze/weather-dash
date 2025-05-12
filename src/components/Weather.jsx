@@ -8,72 +8,194 @@ const Weather = () => {
     const [loadingState, setLoadingState] = useState("idle"); // idle, pending, fulfilled, rejected
     const [error, setError] = useState(null); // for error handling
 
+
+   
     const fetchWeather = async () => {
-        // if (!city) return;
-        setLoadingState("pending");
-        setError(null); //clear fetching errors
-        // setWeather(null);
-
-        try {
-            const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`); //link
-
-            const data = await weatherAPI.json();
-            console.log("weather details", data);
-
-            //error handling to account for complete fetching of data properties
-            if (weatherAPI.ok) {
-                setWeather(data);
-                setLoadingState("fulfilled");
-            } else {
-                setError("No data was inputted. Input your city  ");
-                setLoadingState("rejected");
-            }
+      // if (!city) return;
+      setLoadingState("pending");  
+      setError(null); //clear fetching errors
 
 
-        } catch (error) {
-            setError("Failed to fetch weather data");
-            setLoadingState("rejected");
-            console.log("Fecthing error", error);
+      try {
+          const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+        
+          const data = await weatherAPI.json();
+          console.log("weather details", data);
+        //error handling to account for complete fetching of data properties
+        if (weatherAPI.ok) {
+          setWeather(data);
+          setLoadingState("fulfilled");
         }
+  
+        else {
+          setError("No data was inputted. Input your city  ");        
+          setLoadingState("rejected");
+          // setError(null)
+  
+        }
+
+      } catch (error) {
+        setError("There was an issue fetching the data. Please try again", error);
+        setLoadingState("rejected");
+      }
 
 
     }
 
   return (
     <div className="weather-container">
-      <h1 className="title">Weather Dashboard</h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Enter city name"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <button onClick={fetchWeather} disabled={loadingState === "pending"}>
-          Search
-        </button>
-      </div>
+        <h1 className="title">Weather Dashboard</h1>
+
+        <div className="search-bar">
+            <input
+                type="text"
+                placeholder="Enter city name"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+            />
+            <button onClick={fetchWeather} disabled={loadingState === "pending"}>
+                Search
+            </button>
+        </div>
+        {/* = EQUAL TO */}
+        {/* == LOOSE EQUALITY. This is used in logical statements*/}
+        {/* === STRICT EQUALITY. This is used to assign values to states */}
+
+        {/* SHORT-CIRCUIT CONDITIONAL RENDERING */}
+        {/* condition && expression */}
+        {/* the condition must exist (it is either true or defined or it has a value) for the expression to be displayed */}
+
       {loadingState === "pending" && (
         <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading weather data...</p>
+            {/* SPINNER UI LOADER */}
+            <div className="spinner"></div>
+            {/* TEXT LOADER */}
+            <p>Loading weather data...</p> 
         </div>
       )}
-      {loadingState === "rejected" && <p className="error">{error}</p>}
-      {loadingState === "fulfilled" && weather && (
+
+      {/* UI ERROR HANDLING */}
+      {loadingState === "rejected" && <p className="error">{error}</p>} 
+
+       {/* SHORT-CIRCUIT CONDITIONAL RENDERING */}
+        {/* condition1 && condition2 && expression */}
+        {/* the condition must exist (it is either true or defined or it havs a value) for the expression to be displayed */}
+        {loadingState === "fulfilled" && weather && (
         <div className="weather-card">
-          <h2>{weather.name}, {weather.sys.country}</h2>
-          <h3>{weather.weather[0].description}</h3>
-          <h1>{Math.round(weather.main.temp)}°C</h1>
-          <p>Humidity: {weather.main.humidity}%</p>
-          <p>Wind Speed: {weather.wind.speed} m/s</p>
+            <h2>{weather.name}, {weather.sys.country}</h2>
+            <h3>{weather.weather[0].description}</h3>
+            <h1>{Math.round(weather.main.temp)}°C</h1>
+             <h1>LATITUDE is {weather.coord.lat}° and LONGITUDE is {weather.coord.long}°</h1>
+            <p>Timezone: {weather.timezone}</p>
+            <p>Humidity: {weather.main.humidity}%</p>
+            <p>Pressure: {weather.main.pressure}mmHg</p>
+            <p>Wind Speed: {weather.wind.speed} m/s</p>
         </div>
       )}
+
+      
     </div>
   );
 };
 
 export default Weather;
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import {API_KEY} from '../config';
+// import './weather.css';
+
+// const Weather = () => {
+//     const [city, setCity] = useState(""); //sets the city or state after fecthing
+//     const [weather, setWeather] = useState(null); //displays the weather details
+//     const [loadingState, setLoadingState] = useState("idle"); // idle, pending, fulfilled, rejected
+//     const [error, setError] = useState(null); // for error handling
+
+//     const fetchWeather = async () => {
+//         // if (!city) return;
+//         setLoadingState("pending");
+//         setError(null); //clear fetching errors
+//         // setWeather(null);
+
+//         try {
+//             const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`); //link
+
+//             const data = await weatherAPI.json();
+//             console.log("weather details", data);
+
+//             //error handling to account for complete fetching of data properties
+//             if (weatherAPI.ok) {
+//                 setWeather(data);
+//                 setLoadingState("fulfilled");
+//             } else {
+//                 setError("No data was inputted. Input your city  ");
+//                 setLoadingState("rejected");
+//             }
+
+
+//         } catch (error) {
+//             setError("Failed to fetch weather data");
+//             setLoadingState("rejected");
+//             console.log("Fecthing error", error);
+//         }
+
+
+//     }
+
+//   return (
+//     <div className="weather-container">
+//       <h1 className="title">Weather Dashboard</h1>
+//       <div className="search-bar">
+//         <input
+//           type="text"
+//           placeholder="Enter city name"
+//           value={city}
+//           onChange={(e) => setCity(e.target.value)}
+//         />
+//         <button onClick={fetchWeather} disabled={loadingState === "pending"}>
+//           Search
+//         </button>
+//       </div>
+//       {loadingState === "pending" && (
+//         <div className="loading-spinner">
+//           <div className="spinner"></div>
+//           <p>Loading weather data...</p>
+//         </div>
+//       )}
+//       {loadingState === "rejected" && <p className="error">{error}</p>}
+//       {loadingState === "fulfilled" && weather && (
+//         <div className="weather-card">
+//           <h2>{weather.name}, {weather.sys.country}</h2>
+//           <h3>{weather.weather[0].description}</h3>
+//           <h1>{Math.round(weather.main.temp)}°C</h1>
+//           <p>Humidity: {weather.main.humidity}%</p>
+//           <p>Wind Speed: {weather.wind.speed} m/s</p>
+//         </div>
+//       )}
+
+      
+//     </div>
+//   );
+// };
+
+// export default Weather;
+
+
+
+// const Greeting = ({ isLoggedIn}) => {
+//   return (
+//     <h1>{isLoggedIn ? "Welcome Back!" : "Please Sign In"}</h1>
+//   );
+// }
+// export default Greeting;
+
 
 
 // import React, { useState } from "react";
