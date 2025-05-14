@@ -8,39 +8,65 @@ const Weather = () => {
     const [loadingState, setLoadingState] = useState("idle"); // idle, pending, fulfilled, rejected
     const [error, setError] = useState(null); // for error handling
 
-
-   
-    const fetchWeather = async () => {
-      // if (!city) return;
-      setLoadingState("pending");  
-      setError(null); //clear fetching errors
-
-
-      try {
-          const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
-        
-          const data = await weatherAPI.json();
-          console.log("weather details", data);
-        //error handling to account for complete fetching of data properties
-        if (weatherAPI.ok) {
-          setWeather(data);
-          setLoadingState("fulfilled");
-        }
-  
-        else {
-          setError("No data was inputted. Input your city  ");        
-          setLoadingState("rejected");
-          // setError(null)
-  
-        }
-
-      } catch (error) {
-        setError("There was an issue fetching the data. Please try again", error);
-        setLoadingState("rejected");
+  const fetchWeather = async () => {
+    setLoadingState("pending");
+    setError(null); //clear fetching errors
+    //sets up the connection to the API and collects or fetches the data and 
+    // the connection and collection must be completed before the next line of code runs.
+    
+    try {
+      const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`) 
+    //converts JSON (JAVASCRIPT OBJECT NOTATION) to JavaScript Objects before the next line of code runs
+    // or before the data is logged to the console
+      const data = await weatherAPI.json();
+      console.log("Weather details", data);
+      
+      //.ok refers to if the API response is working or not
+      //error handling to account for complete fetching of data properties
+      if (weatherAPI.ok) {
+        setLoadingState("fulfilled");
+        setWeather(data);
       }
-
-
     }
+
+    catch (error) {
+      console.log("There was an issue fetching the data", error);
+      setError("There was an issue fetching the data. Please try again");
+      setLoadingState("rejected");
+    }
+  }
+   
+    // const fetchWeather = async () => {
+    //   // if (!city) return;
+    //   setLoadingState("pending");  
+    //   setError(null); //clear fetching errors
+
+
+    //   try {
+    //       const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+        
+    //       const data = await weatherAPI.json();
+    //       console.log("weather details", data);
+    //     //error handling to account for complete fetching of data properties
+    //     if (weatherAPI.ok) {
+    //       setWeather(data);
+    //       setLoadingState("fulfilled");
+    //     }
+  
+    //     else {
+    //       setError("No data was inputted. Input your city  ");        
+    //       setLoadingState("rejected");
+    //       // setError(null)
+  
+    //     }
+
+    //   } catch (error) {
+    //     setError("There was an issue fetching the data. Please try again", error);
+    //     setLoadingState("rejected");
+    //   }
+
+
+    // }
 
   return (
     <div className="weather-container">
