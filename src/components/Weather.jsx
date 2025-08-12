@@ -2,71 +2,132 @@ import React, { useState } from "react";
 import {API_KEY} from '../config';
 import './weather.css';
 
+// TO PUSH FOR THE FIRST TIME TO GITHUB
+// 1. git add .
+// 2. git commit -m "Your commit message"
+// 3. git branch -M main
+// 4. git remote add origin <your-repo-url>
+// 5. git push -u origin main
+
+//NOTE: You can always check the status of your git repository by 
+// using the command "git status" in the terminal
+
+//FROM THE SECOND TIME OF PUSHING TO GITHUB, YOU WILL DO THIS 
+//1. git add .
+// 2. git commit -m "Your commit message"
+// 3. git push
+
+//NOTE: You can always check the status of your git repository by 
+// using the command "git status" in the terminal
+
+
+//FOR YOU RECEIVING THE REPO FROM MY GITHUB FOR THE FIRST TIME
+// 1. git clone <your-repo-url>
+// 2. cd <your-repo-name>
+// 3. npm install
+// 4. git fetch origin
+// 5. git pull origin {branch name}
+// 6. npm run dev
+
+//NOTE: You can switch between branches using the command "git checkout {branch name}"
+
+//FOR YOU RECEIVING THE REPO FROM MY GITHUB FROM THE SECOND TIME
+// 1. git fetch origin
+// 2. git pull origin {branch name}
+// 3. npm run dev
+
+//NOTE: You can switch between branches using the command "git checkout {branch name}"
+
+
+
+
+
 const Weather = () => {
     const [city, setCity] = useState(""); //sets the city or state after fecthing
     const [weather, setWeather] = useState(null); //displays the weather details
     const [loadingState, setLoadingState] = useState("idle"); // idle, pending, fulfilled, rejected
     const [error, setError] = useState(null); // for error handling
 
-  const fetchWeather = async () => {
-    setLoadingState("pending");
-    setError(null); //clear fetching errors
-    //sets up the connection to the API and collects or fetches the data and 
-    // the connection and collection must be completed before the next line of code runs.
-    
-    try {
-      const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`) 
-    //converts JSON (JAVASCRIPT OBJECT NOTATION) to JavaScript Objects before the next line of code runs
-    // or before the data is logged to the console
-      const data = await weatherAPI.json();
-      console.log("Weather details", data);
-      
-      //.ok refers to if the API response is working or not
-      //error handling to account for complete fetching of data properties
-      if (weatherAPI.ok) {
-        setLoadingState("fulfilled");
-        setWeather(data);
+    // STEPS IN USING THE WEATHER API
+    // 1. Set up the API key in the config <file>
+    // 2. Create a function to fetch the weather data
+    // 3. Call the function when the user clicks the search button
+    // 4. set up the API connection and fetch the data
+    // 5. convert the data to JSON format
+    // 6. put the connection in a try and catch block to handle errors
+    // 7. check if the API response is ok
+    // 8. If the response is ok, set the weather state to the fetched data to display the weather details
+    // 9. If the response is not ok, set the error state to an error message
+
+    const fetchWeather = async () => {
+      if (!city) {
+        setError(weather.message);
+        //if the city is not inputted, then set the error state to "Please enter a city name"
       }
-    }
 
-    catch (error) {
-      console.log("There was an issue fetching the data", error);
-      setError("There was an issue fetching the data. Please try again");
-      setLoadingState("rejected");
-    }
-  }
+      setLoadingState("pending");
+      // => loading state = pending;
+      setError(null); //clear fetching errors
+
+        try {
+          const weatherJSON = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+          const weatherDetails = await weatherJSON.json(); //converts the JSON to JavaScript Objects
+          
+          console.log("Weather details", weatherDetails);
+          
+          // if (weatherJSON.ok) {
+          //   // => if the API response is ok, then set the weather state to the weatherDetails
+          //   setLoadingState("fulfilled");
+          //   // => loading state = fulfilled;
+          //   setWeather(weatherDetails);
+          //   //=> weather state = weatherDetails;
+          // }
+          //   else {
+          //     setError(weather.message);
+          //   }
+        }
+
+        catch (error) {
+          console.error("There was an issue fetching the data", error);
+          setError("There was an issue fetching the data. Please try again");
+          // => error state = "There was an issue fetching the data. Please try again";
+          setLoadingState("rejected");
+          // => loading state = rejected;
+
+        }
+
+      }
+
+
+  // const fetchWeather = async () => {
+  //   setLoadingState("pending");
+  //   setError(null); //clear fetching errors
+  //   //sets up the connection to the API and collects or fetches the data and 
+  //   // the connection and collection must be completed before the next line of code runs.
+    
+  //   try {
+  //     const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`) 
+  //   //converts JSON (JAVASCRIPT OBJECT NOTATION) to JavaScript Objects before the next line of code runs
+  //   // or before the data is logged to the console
+  //     const message = await weatherAPI.json();
+  //     console.log("Weather details", message);
+      
+  //     //.ok refers to if the API response is working or not
+  //     //error handling to account for complete fetching of data properties
+  //     if (weatherAPI.ok) {
+  //       setLoadingState("fulfilled");
+  //       setWeather(message);
+  //     }
+  //   }
+
+  //   catch (error) {
+  //     console.log("There was an issue fetching the data", error);
+  //     setError("There was an issue fetching the data. Please try again");
+  //     setLoadingState("rejected");
+  //   }
+  // }
    
-    // const fetchWeather = async () => {
-    //   // if (!city) return;
-    //   setLoadingState("pending");  
-    //   setError(null); //clear fetching errors
-
-
-    //   try {
-    //       const weatherAPI = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
-        
-    //       const data = await weatherAPI.json();
-    //       console.log("weather details", data);
-    //     //error handling to account for complete fetching of data properties
-    //     if (weatherAPI.ok) {
-    //       setWeather(data);
-    //       setLoadingState("fulfilled");
-    //     }
-  
-    //     else {
-    //       setError("No data was inputted. Input your city  ");        
-    //       setLoadingState("rejected");
-    //       // setError(null)
-  
-    //     }
-
-    //   } catch (error) {
-    //     setError("There was an issue fetching the data. Please try again", error);
-    //     setLoadingState("rejected");
-    //   }
-
-
-    // }
+    
 
   return (
     <div className="weather-container">
@@ -77,18 +138,19 @@ const Weather = () => {
                 type="text"
                 placeholder="Enter city name"
                 value={city}
-                onChange={(e) => setCity(e.target.value)}
+                onChange={(event) => setCity(event.target.value)}
+                // city=event.target.value
             />
             <button onClick={fetchWeather} disabled={loadingState === "pending"}>
                 Search
             </button>
         </div>
-        {/* = EQUAL TO */}
+        {/* = EQUAL TO. This is used for the assignment of variables */}
         {/* == LOOSE EQUALITY. This is used in logical statements*/}
         {/* === STRICT EQUALITY. This is used to assign values to states */}
 
         {/* SHORT-CIRCUIT CONDITIONAL RENDERING */}
-        {/* condition && expression */}
+        {/* {condition && expression} */}
         {/* the condition must exist (it is either true or defined or it has a value) for the expression to be displayed */}
 
       {loadingState === "pending" && (
@@ -101,25 +163,23 @@ const Weather = () => {
       )}
 
       {/* UI ERROR HANDLING */}
-      {loadingState === "rejected" && <p className="error">{error}</p>} 
+      {loadingState === "rejected" && city === "" && <p className="error">{error}</p>} 
 
-       {/* SHORT-CIRCUIT CONDITIONAL RENDERING */}
-        {/* condition1 && condition2 && expression */}
+       {/* COMPLEX SHORT-CIRCUIT CONDITIONAL RENDERING */}
+        {/* {condition1 && condition2 && expression} */}
         {/* the condition must exist (it is either true or defined or it havs a value) for the expression to be displayed */}
         {loadingState === "fulfilled" && weather && (
         <div className="weather-card">
             <h2>{weather.name}, {weather.sys.country}</h2>
             <h3>{weather.weather[0].description}</h3>
             <h1>{Math.round(weather.main.temp)}°C</h1>
-             <h1>LATITUDE is {weather.coord.lat}° and LONGITUDE is {weather.coord.long}°</h1>
+             <h1>LATITUDE is {weather.coord.lat}° and LONGITUDE is {weather.coord.lon}°</h1>
             <p>Timezone: {weather.timezone}</p>
             <p>Humidity: {weather.main.humidity}%</p>
             <p>Pressure: {weather.main.pressure}mmHg</p>
             <p>Wind Speed: {weather.wind.speed} m/s</p>
         </div>
-      )}
-
-      
+      )}      
     </div>
   );
 };
